@@ -1,0 +1,44 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Liquid Nav demo</title>
+<style>
+:root{color-scheme:dark}body{margin:0;font:15px -apple-system,system-ui,sans-serif;color:#eef;background:
+ radial-gradient(60% 50% at 20% 10%,#3a4cff55,transparent),radial-gradient(50% 40% at 90% 80%,#ff4fa055,transparent),#0b0d14;min-height:100vh}
+main{max-width:860px;margin:auto;padding:24px 20px 140px}h1{font-weight:700;letter-spacing:-.02em}
+.view{padding:28px;border-radius:24px;background:#ffffff0d;border:1px solid #ffffff1a;min-height:160px}
+.bar{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);display:flex;gap:4px;padding:8px;border-radius:999px;
+ background:rgba(30,32,44,.55);backdrop-filter:blur(22px) saturate(1.6);-webkit-backdrop-filter:blur(22px) saturate(1.6);
+ border:1px solid #ffffff22;box-shadow:0 10px 40px #0008,inset 0 1px 0 #ffffff22;touch-action:pan-y;user-select:none}
+.bar button{all:unset;cursor:pointer;width:76px;height:54px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+ gap:2px;font-size:11px;color:#c8cbe0;border-radius:999px;transition:color .25s}
+.bar button[aria-selected=true]{color:#fff}.bar svg{width:24px;height:24px;fill:currentColor}
+.seg{display:inline-flex;padding:4px;border-radius:999px;background:#ffffff12;margin:8px 8px 0 0}
+.seg button{all:unset;cursor:pointer;padding:8px 18px;border-radius:999px;font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:20px}
+code{background:#ffffff14;padding:1px 5px;border-radius:5px}
+</style></head><body><main>
+<h1>Liquid navbar</h1>
+<p>Raymarched SDF glass indicator. Click, drag the blob, or swipe. Hover for ripples.</p>
+<div class="view" id="view"><h2 id="vt">Cars</h2><p id="vd"></p></div>
+<h2 style="margin-top:36px">Secondary: segmented controls (same module)</h2>
+<div class="seg" id="seg1"><button>Day</button><button>Week</button><button>Month</button></div>
+<div class="seg" id="seg2"><button>Off</button><button>Auto</button></div>
+<div class="grid"><div class="view"><b>Color</b><p>
+<button onclick="nav.setColor([.35,.65,1])">Blue</button> <button onclick="nav.setColor([1,.45,.25])">Amber</button>
+<button onclick="nav.setColor([.4,1,.6])">Green</button></p></div>
+<div class="view"><b>API</b><p><code>attachLiquidNav(el,{tabs,active})</code> → <code>setActive(i)</code>, <code>destroy()</code></p></div></div>
+</main>
+<nav class="bar" id="bar" role="tablist">
+ <button role="tab" data-path="cars"><svg viewBox="0 0 24 24"><path d="M5 11l1.5-4.5A2 2 0 0 1 8.4 5h7.2a2 2 0 0 1 1.9 1.5L19 11a2 2 0 0 1 2 2v4h-2v2h-2v-2H7v2H5v-2H3v-4a2 2 0 0 1 2-2zm2.2 0h9.6l-1-3H8.2zM6.5 15a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm11 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>Cars</button>
+ <button role="tab" data-path="power"><svg viewBox="0 0 24 24"><path d="M13 2L4 14h6l-1 8 9-12h-6z"/></svg>Power</button>
+ <button role="tab" data-path="weather"><svg viewBox="0 0 24 24"><path d="M6.5 19a4.5 4.5 0 0 1-.4-9A6 6 0 0 1 17.7 9 5 5 0 0 1 17.5 19z"/></svg>Weather</button>
+ <button role="tab" data-path="cameras"><svg viewBox="0 0 24 24"><path d="M4 7h3l2-2h6l2 2h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1zm8 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/></svg>Cameras</button>
+ <button role="tab" data-path="home"><svg viewBox="0 0 24 24"><path d="M12 3l9 8h-3v9h-5v-6h-2v6H6v-9H3z"/></svg>Home</button>
+</nav>
+<script type="module">
+import { attachLiquidNav } from './liquid-nav.js';
+const bar=document.getElementById('bar'), tabs=bar.querySelectorAll('button');
+const names=[...tabs].map(t=>t.textContent.trim());
+window.nav = attachLiquidNav(bar,{tabs,active:0,onChange:i=>{vt.textContent=names[i];vd.textContent='Route: /dashboard-mobile/'+tabs[i].dataset.path;}});
+attachLiquidNav(seg1,{active:1,color:[1,.5,.8],swipe:true});
+attachLiquidNav(seg2,{active:0,color:[.4,1,.6]});
+</script></body></html>
